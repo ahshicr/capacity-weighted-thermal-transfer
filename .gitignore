@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+results/
+tables/
+figures/
+vehicle_surface_fields/
+*.log
+*.zip

@@ -1,0 +1,91 @@
+{
+  "snapshot_date": "2026-10-06",
+  "paper": "Capacity-weighted moment projection for conservative thermal transfer between nonmatching discretizations",
+  "scope": "Minimal reproducibility code and indispensable small vehicle inputs; before reviewer-requested revisions.",
+  "files": [
+    {
+      "file": "code/conservative_transfer.py",
+      "source_sha256": "b6a1d799e7f043c48b9208033651411e61435a562340e47b84f53c2e928d0596",
+      "release_sha256": "b6a1d799e7f043c48b9208033651411e61435a562340e47b84f53c2e928d0596",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "code/run_manufactured_benchmark.py",
+      "source_sha256": "dc21cecbdded336eb6f4991e25bcfc1cc505dec91828b4bf7cba2e544d32fb8f",
+      "release_sha256": "dc21cecbdded336eb6f4991e25bcfc1cc505dec91828b4bf7cba2e544d32fb8f",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "code/analyze_transfer.py",
+      "source_sha256": "c8bdce134ef38095e4def145d54da63858f61b6b4ad280dbf4022d9624a7b08e",
+      "release_sha256": "f53391f0acc93b28e2b862e0726b1cf4ba9149c458452fdfd1c27dd9f90ee692",
+      "adaptation": "Use the supplementary wall-field location by default; exclude coarse and medium GCI-only fields from the nine-case application. Numerical routines unchanged."
+    },
+    {
+      "file": "code/analyze_gci_transfer.py",
+      "source_sha256": "2c6f532faf126308c4c4fba6e66bdce2115b293e617e37662d13d1725f5e3728",
+      "release_sha256": "626bc008a14926d9045738859dcdb1848dfb8e41f1ff0f9f5575c7deac93c313",
+      "adaptation": "Use coarse, medium and fine directories from the supplementary wall-field archive."
+    },
+    {
+      "file": "code/run_transfer_sweep.py",
+      "source_sha256": "354ba8429495f6fa4333fb6cac81d9d5ab26bd552c60f6933c7831c68e40d379",
+      "release_sha256": "354ba8429495f6fa4333fb6cac81d9d5ab26bd552c60f6933c7831c68e40d379",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "code/vtp_polydata.py",
+      "source_sha256": "a5c769a9c14d949be0203d9557180bb8bef06b80208b282cd8e6d8d982241600",
+      "release_sha256": "a5c769a9c14d949be0203d9557180bb8bef06b80208b282cd8e6d8d982241600",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "scripts/analyze_manufactured_benchmark.py",
+      "source_sha256": "e0d7c828e3d409af01ac3f5a3f96ecfe33e1af30838d302fa8b507c02f1e0491",
+      "release_sha256": "e0d7c828e3d409af01ac3f5a3f96ecfe33e1af30838d302fa8b507c02f1e0491",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "scripts/analyze_evidence.py",
+      "source_sha256": "4521a47bca5834b3fd29e3d4d36f4610e29d7b0846723ad4bb6006337415b556",
+      "release_sha256": "4521a47bca5834b3fd29e3d4d36f4610e29d7b0846723ad4bb6006337415b556",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "scripts/write_latex_tables.py",
+      "source_sha256": "a11ff8b9ef0d81e615b7bef1415806fc52e8dba756208c736e2ea66137dbb92c",
+      "release_sha256": "a11ff8b9ef0d81e615b7bef1415806fc52e8dba756208c736e2ea66137dbb92c",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "tests/test_transfer.py",
+      "source_sha256": "9bd2c6ee6b4bf0217163d476d7c12f8c99e234401f93eace678f5d561c8808a2",
+      "release_sha256": "9bd2c6ee6b4bf0217163d476d7c12f8c99e234401f93eace678f5d561c8808a2",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "data/vehicle/thermal_nodes.csv",
+      "source_sha256": "a54ed5528ab31aacba91ff640a54182620639a935e74f127ad04a83415bb666c",
+      "release_sha256": "a54ed5528ab31aacba91ff640a54182620639a935e74f127ad04a83415bb666c",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "data/vehicle/thermal_links.csv",
+      "source_sha256": "ce30f1fde6b49a36afe508d3e57f66ef8cd9c954afab81ac39f0bdff75ca19dd",
+      "release_sha256": "ce30f1fde6b49a36afe508d3e57f66ef8cd9c954afab81ac39f0bdff75ca19dd",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "data/vehicle/body_envelope_points_40mm.npz",
+      "source_sha256": "f008cdcccae1295daa3ad6bd91dd3b42e7c73792ca3fed40dfc895367faa3515",
+      "release_sha256": "f008cdcccae1295daa3ad6bd91dd3b42e7c73792ca3fed40dfc895367faa3515",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "data/gci/grid_convergence.json",
+      "source_sha256": "8cf3c03a86ed403fa31bf6fdc4a55745f4a5d267581e5b228dc9814ecea7db29",
+      "release_sha256": "af4854c52e2df4eb799e6821077f1aa15d25dbeb830dc6028c2b818a707b2ebc",
+      "adaptation": "Remove historical scheduler output-directory labels; numerical values unchanged."
+    }
+  ]
+}

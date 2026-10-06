@@ -1,0 +1,165 @@
+{
+  "metric": "magnitude of area-averaged body wall heat flux",
+  "grid_order": "coarse_to_fine",
+  "monotonic_convergence": true,
+  "observed_order": 3.711732993152177,
+  "richardson_extrapolated_W_m2": 777.0292223198373,
+  "medium_grid_GCI_percent": 2.1506922396797483,
+  "fine_grid_GCI_percent": 0.7927173069444989,
+  "asymptotic_ratio": 1.0107953382501615,
+  "maximum_consecutive_relative_change_percent": 2.9475733052842688,
+  "verification_pass": true,
+  "policy": "The finest consecutive three grids must have tail variation <=1%, monotonic convergence, refinement ratios >=1.3 with <=10% mismatch, observed order in [0.5, 4], asymptotic ratio in [0.95, 1.05], fine/medium change <=10%, and fine-grid GCI <=5%. Every grid must also pass the declared standard and enhanced mesh-quality limits. An unavailable GCI is an automatic failure.",
+  "final_triplet": {
+    "labels": [
+      "G0",
+      "G1D",
+      "G2D"
+    ],
+    "cell_counts": [
+      1585775,
+      3553009,
+      7891695
+    ],
+    "refinement_ratios": [
+      1.3085337049183383,
+      1.3047420566853971
+    ],
+    "refinement_ratio_relative_mismatch": 0.002906051976720679,
+    "grid_family_pass": true,
+    "iterative_convergence_pass": true,
+    "mesh_quality_pass": true,
+    "monotonic_convergence": true,
+    "observed_order": 3.711732993152177,
+    "observed_order_pass": true,
+    "richardson_extrapolated_W_m2": 777.0292223198373,
+    "medium_grid_GCI_percent": 2.1506922396797483,
+    "fine_grid_GCI_percent": 0.7927173069444989,
+    "fine_grid_GCI_pass": true,
+    "asymptotic_ratio": 1.0107953382501615,
+    "asymptotic_range_pass": true,
+    "consecutive_relative_changes_percent": [
+      2.9475733052842688,
+      1.0680043567324482
+    ],
+    "fine_medium_relative_change_pass": true,
+    "verification_pass": true
+  },
+  "triplets": [
+    {
+      "labels": [
+        "G0",
+        "G1D",
+        "G2D"
+      ],
+      "cell_counts": [
+        1585775,
+        3553009,
+        7891695
+      ],
+      "refinement_ratios": [
+        1.3085337049183383,
+        1.3047420566853971
+      ],
+      "refinement_ratio_relative_mismatch": 0.002906051976720679,
+      "grid_family_pass": true,
+      "iterative_convergence_pass": true,
+      "mesh_quality_pass": true,
+      "monotonic_convergence": true,
+      "observed_order": 3.711732993152177,
+      "observed_order_pass": true,
+      "richardson_extrapolated_W_m2": 777.0292223198373,
+      "medium_grid_GCI_percent": 2.1506922396797483,
+      "fine_grid_GCI_percent": 0.7927173069444989,
+      "fine_grid_GCI_pass": true,
+      "asymptotic_ratio": 1.0107953382501615,
+      "asymptotic_range_pass": true,
+      "consecutive_relative_changes_percent": [
+        2.9475733052842688,
+        1.0680043567324482
+      ],
+      "fine_medium_relative_change_pass": true,
+      "verification_pass": true
+    }
+  ],
+  "cases": [
+    {
+      "label": "G0",
+      "cell_count": 1585775,
+      "characteristic_spacing": 0.008575368884448297,
+      "heat_flux_magnitude_W_m2": 741.370045952,
+      "tail_std_W_m2": 1.5662858053802537,
+      "tail_relative_range": 0.005359925224517801,
+      "tail_relative_95CI": 0.0018518552893274085,
+      "standard_mesh_ok": true,
+      "max_nonorthogonality_deg": 69.98348955,
+      "max_skewness": 2.281359703,
+      "minimum_determinant": 0.001613765752,
+      "minimum_face_weight": 0.0392939289,
+      "concave_face_count": 338,
+      "concave_cell_count": 39567,
+      "concave_cell_fraction": 0.024951206823162177,
+      "average_surface_layers": 2.99,
+      "mesh_quality_pass": true,
+      "openfoam_version": "v2312",
+      "base_cells": [
+        128,
+        56,
+        54
+      ],
+      "surface_refinement_level": 2
+    },
+    {
+      "label": "G1D",
+      "cell_count": 3553009,
+      "characteristic_spacing": 0.006553418419576331,
+      "heat_flux_magnitude_W_m2": 763.886150198,
+      "tail_std_W_m2": 2.5373411051634327,
+      "tail_relative_range": 0.008292710711351525,
+      "tail_relative_95CI": 0.0029115301268094326,
+      "standard_mesh_ok": true,
+      "max_nonorthogonality_deg": 66.46055606,
+      "max_skewness": 3.318473679,
+      "minimum_determinant": 0.00157173277,
+      "minimum_face_weight": 0.03710253196,
+      "concave_face_count": 351,
+      "concave_cell_count": 79309,
+      "concave_cell_fraction": 0.02232164342955506,
+      "average_surface_layers": 3.0,
+      "mesh_quality_pass": true,
+      "openfoam_version": "v2312",
+      "base_cells": [
+        184,
+        81,
+        78
+      ],
+      "surface_refinement_level": 2
+    },
+    {
+      "label": "G2D",
+      "cell_count": 7891695,
+      "characteristic_spacing": 0.005022769355825639,
+      "heat_flux_magnitude_W_m2": 772.1325595740001,
+      "tail_std_W_m2": 0.5251357244816764,
+      "tail_relative_range": 0.0017447539069499328,
+      "tail_relative_95CI": 0.0005961434365324156,
+      "standard_mesh_ok": true,
+      "max_nonorthogonality_deg": 66.6358169,
+      "max_skewness": 3.697833785,
+      "minimum_determinant": 0.001121344195,
+      "minimum_face_weight": 0.03721396888,
+      "concave_face_count": 524,
+      "concave_cell_count": 160735,
+      "concave_cell_fraction": 0.020367614308459715,
+      "average_surface_layers": 3.0,
+      "mesh_quality_pass": true,
+      "openfoam_version": "v2312",
+      "base_cells": [
+        262,
+        115,
+        111
+      ],
+      "surface_refinement_level": 2
+    }
+  ]
+}
