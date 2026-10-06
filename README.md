@@ -9,8 +9,8 @@ minimizes the correction to that approximation. The manufactured benchmark
 uses cell-integrated target loads to assess accuracy; vehicle wall fields
 demonstrate transfer to a reduced thermal graph.
 
-This initial code release is a snapshot of the existing method. It does not
-claim that reviewer-requested additional analyses have already been completed.
+The dated release also supplies independently recorded timing stages,
+moment-compatibility diagnostics and a checked optional nonnegative extension.
 
 ## Contents
 
@@ -23,6 +23,9 @@ claim that reviewer-requested additional analyses have already been completed.
 | `code/run_transfer_sweep.py` | Neighborhood and projection-metric sensitivity |
 | `code/vtp_polydata.py` | ASCII VTP wall-field reader |
 | `scripts/` | Statistical analysis and numerical table generation |
+| `code/revision_projection.py` | Conditional error identity, moment-defect decomposition and an optional nonnegative QP with feasibility and optimality checks |
+| `code/run_revision_benchmarks.py` | Setup/application timing, 48-case compatibility audit and illustrative bounded-load examples |
+| `tests/test_revision_projection.py` | Six additional mathematical and constrained-optimization checks |
 | `tests/test_transfer.py` | Conservation, planar rank adaptation, overlap coverage and capacity-metric optimality |
 | `data/vehicle/` | Indispensable small graph and alignment inputs |
 | `data/gci/grid_convergence.json` | Recorded scalar source-grid convergence inputs for the evidence analysis |
@@ -66,6 +69,42 @@ The conserved first moments use cell centers and integrated source loads.
 The exact target cell integrals do not automatically satisfy the same source
 discrete first moments. The projection therefore does not provide an
 unconditional guarantee of smaller error against those target integrals.
+
+## Timing and projection diagnostics
+
+```text
+python -B code/run_revision_benchmarks.py --output-dir results/revision_20261006_r02 --cpu-label "your CPU model"
+python -B scripts/write_revision_tables.py
+```
+
+Use a new result directory for every numerical run. The benchmark refuses to
+overwrite an existing directory. Its default settings are seven setup
+repetitions, 31 application repetitions, two warm-ups and 128-operation batches
+for small projection stages. BLAS thread limits, software versions, source
+hashes, raw timings, interquartile ranges and completion state are recorded.
+On a fresh checkout the directory above regenerates the input used by the
+revision table writer. If retained supplementary results are already present,
+choose another directory for new computations and keep those records intact.
+
+Common-refinement construction is timed separately from application with
+cached intersections. The projected local RBF path reuses its small Gram
+factor, but builds the current-field local RBF. These implementation-specific
+measurements do not assert that projected RBF application is always faster
+than cached common refinement.
+
+The error identity is conditional on the reference load satisfying the same
+discrete constraints. For an incompatible reference, the diagnostic separates
+the null-space prior error from the forced moment-defect contribution. A
+moment-compatible diagnostic reference is never substituted for the original
+cell-integrated accuracy reference.
+
+`nonnegative_capacity_projection` keeps the closed-form fast path if it is
+already nonnegative. Otherwise it checks feasibility, solves a bounded convex
+quadratic problem and checks a primal/dual optimality certificate. This is
+an optional extension with extra cost. Nonnegative total/first-moment data
+can be infeasible when the prescribed heating centroid lies outside the
+target convex hull. Signed heating/cooling loads should use appropriate
+physical sign conventions rather than an unconditional nonnegative bound.
 
 ## Vehicle application using the submitted data archive
 

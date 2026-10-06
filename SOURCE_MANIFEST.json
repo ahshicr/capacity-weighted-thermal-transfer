@@ -1,7 +1,7 @@
 {
   "snapshot_date": "2026-10-06",
   "paper": "Capacity-weighted moment projection for conservative thermal transfer between nonmatching discretizations",
-  "scope": "Minimal reproducibility code and indispensable small vehicle inputs; before reviewer-requested revisions.",
+  "scope": "Minimal numerical reproducibility code, projection diagnostics, optional nonnegative extension and indispensable small vehicle inputs.",
   "files": [
     {
       "file": "code/conservative_transfer.py",
@@ -86,6 +86,30 @@
       "source_sha256": "8cf3c03a86ed403fa31bf6fdc4a55745f4a5d267581e5b228dc9814ecea7db29",
       "release_sha256": "af4854c52e2df4eb799e6821077f1aa15d25dbeb830dc6028c2b818a707b2ebc",
       "adaptation": "Remove historical scheduler output-directory labels; numerical values unchanged."
+    },
+    {
+      "file": "code/revision_projection.py",
+      "source_sha256": "95a5481a06ecbba10bb7b85bbebd59897b2791bfa09dcef3d3f8de24fad612cd",
+      "release_sha256": "95a5481a06ecbba10bb7b85bbebd59897b2791bfa09dcef3d3f8de24fad612cd",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "code/run_revision_benchmarks.py",
+      "source_sha256": "5f2ad3e388e029817bd46455e783921a10390a5bd9796731fb2fe8e332fde75d",
+      "release_sha256": "5f2ad3e388e029817bd46455e783921a10390a5bd9796731fb2fe8e332fde75d",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "tests/test_revision_projection.py",
+      "source_sha256": "2ea93904478c1a3faa7a38cb6c7501c2521100bb4cd201e18e251d0e9274748e",
+      "release_sha256": "2ea93904478c1a3faa7a38cb6c7501c2521100bb4cd201e18e251d0e9274748e",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "scripts/write_revision_tables.py",
+      "source_sha256": "099a49ff4fa5b63877b6373b809641132852f45d88092b477f5590ef364b9987",
+      "release_sha256": "099a49ff4fa5b63877b6373b809641132852f45d88092b477f5590ef364b9987",
+      "adaptation": "none; exact copy"
     }
   ]
 }
