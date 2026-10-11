@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run the complete transfer neighborhood and metric study.")
     parser.add_argument("--surface-root", type=Path, required=True)
-    parser.add_argument("--output", type=Path, default=ROOT / "results" / "transfer_sweep")
+    parser.add_argument("--output", type=Path, default=ROOT / "results" / "revision_20261011" / "transfer_sweep")
     parser.add_argument("--parallel-runs", type=int, default=0)
     parser.add_argument("--total-workers", type=int, default=0)
     args = parser.parse_args()
@@ -27,6 +27,8 @@ def main() -> None:
     studies.extend([(24, "uniform"), (24, "surface_area")])
     parallel_runs = args.parallel_runs or min(len(studies), max(total_workers // 4, 1))
     workers_per_run = max(total_workers // parallel_runs, 1)
+    if args.output.exists() and any(args.output.iterdir()):
+        raise FileExistsError(f"Use a new output directory; retained results exist in {args.output}")
     args.output.mkdir(parents=True, exist_ok=True)
 
     records = []
@@ -57,6 +59,9 @@ def main() -> None:
     (args.output / "sweep_manifest.json").write_text(
         json.dumps(
             {
+                "status": "complete",
+                "flux_convention": "openfoam-wallHeatFlux",
+                "export_to_target_flux_multiplier": -1,
                 "study_count": len(studies),
                 "parallel_runs": parallel_runs,
                 "total_workers": total_workers,

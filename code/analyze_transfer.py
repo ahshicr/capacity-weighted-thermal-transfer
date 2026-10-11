@@ -29,6 +29,21 @@ METHODS = (
 )
 
 
+def target_inward_heat_flux(exported_flux: np.ndarray, convention: str = "openfoam-wallHeatFlux") -> np.ndarray:
+    """Convert a CFD field to heat input positive into the thermal target.
+
+    OpenFOAM's fluid-side wallHeatFlux is positive for heat entering the fluid.
+    At the same interface its negative is the heat entering the solid target.
+    A field already supplied in the target-inward convention is unchanged.
+    """
+    values = np.asarray(exported_flux, dtype=float)
+    if convention == "openfoam-wallHeatFlux":
+        return -values
+    if convention == "target-inward":
+        return values.copy()
+    raise ValueError(f"Unknown heat-flux convention: {convention}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate conservative thermal transfer on complete CFD surfaces.")
     parser.add_argument(
@@ -43,7 +58,9 @@ def main() -> None:
         type=Path,
         default=ROOT / "data" / "vehicle" / "body_envelope_points_40mm.npz",
     )
-    parser.add_argument("--output", type=Path, default=ROOT / "results" / "transfer_analysis")
+    parser.add_argument("--output", type=Path, default=ROOT / "results" / "revision_20261011" / "transfer_analysis")
+    parser.add_argument("--flux-convention", choices=("openfoam-wallHeatFlux", "target-inward"),
+                        default="openfoam-wallHeatFlux")
     parser.add_argument("--neighbors", type=int, default=24)
     parser.add_argument("--workers", type=int, default=-1)
     parser.add_argument(
@@ -55,15 +72,15 @@ def main() -> None:
     parser.add_argument("--time-step-s", type=float, default=5.0)
     args = parser.parse_args()
 
+    if args.output.exists() and any(args.output.iterdir()):
+        raise FileExistsError(f"Use a new output directory; retained results exist in {args.output}")
     args.output.mkdir(parents=True, exist_ok=True)
+    (args.output / "run_manifest.json").write_text(json.dumps({"status": "running",
+        "flux_convention": args.flux_convention}), encoding="utf-8")
     targets = _load_targets(args.nodes, args.envelope)
     laplacian = _load_laplacian(args.links, targets["node_id"])
-    # The supplementary archive also contains two GCI-only grids.
-    # Exclude these from the nine-case vehicle application.
-    paths = [
-        path for path in sorted(args.surface_root.rglob("*.vtp"))
-        if _case_label(path, args.surface_root) not in {"gci_coarse", "gci_medium"}
-    ]
+    paths = [path for path in sorted(args.surface_root.rglob("*.vtp"))
+             if _case_label(path, args.surface_root) not in {"gci_coarse", "gci_medium"}]
     if not paths:
         raise FileNotFoundError(f"no VTP surface files found under {args.surface_root}")
 
@@ -86,6 +103,7 @@ def main() -> None:
             projection_metric=args.projection_metric,
             duration_s=args.duration_s,
             time_step_s=args.time_step_s,
+            flux_convention=args.flux_convention,
         )
         rows.extend(current_rows)
         case_summary.update(
@@ -112,6 +130,10 @@ def main() -> None:
     summary.to_csv(args.output / "aggregate_metrics.csv", index=False)
     manifest = {
         "schema_version": "1.0",
+        "status": "complete",
+        "flux_convention": args.flux_convention,
+        "export_to_target_flux_multiplier": -1 if args.flux_convention == "openfoam-wallHeatFlux" else 1,
+        "analysis_source_sha256": _sha256(Path(__file__)),
         "case_count": len(paths),
         "method_count": len(METHODS),
         "target_node_count": len(targets["node_id"]),
@@ -125,6 +147,8 @@ def main() -> None:
         "input_link_sha256": _sha256(args.links),
         "input_envelope_sha256": _sha256(args.envelope),
         "output_sha256": _sha256(args.output / "transfer_metrics.csv"),
+        "output_hashes": {p.name: _sha256(p) for p in args.output.iterdir()
+                          if p.is_file() and p.name != "run_manifest.json"},
     }
     (args.output / "run_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     print(json.dumps(manifest, indent=2), flush=True)
@@ -172,11 +196,13 @@ def _analyze_case(
     projection_metric: str,
     duration_s: float,
     time_step_s: float,
+    flux_convention: str = "openfoam-wallHeatFlux",
 ) -> tuple[list[dict], dict, dict]:
     valid = np.isfinite(surface.face_areas) & (surface.face_areas > 1.0e-14)
     source_xyz = surface.face_centers[valid]
     source_area = surface.face_areas[valid]
-    source_flux = np.asarray(surface.cell_data["wallHeatFlux"])[valid]
+    exported_flux = np.asarray(surface.cell_data["wallHeatFlux"], dtype=float)[valid]
+    source_flux = target_inward_heat_flux(exported_flux, flux_convention)
     source_temperature = np.asarray(surface.cell_data.get("T", np.full(surface.face_count, np.nan)))[valid]
     target_xyz = targets["xyz"]
     target_area = targets["area"]
@@ -315,6 +341,8 @@ def _analyze_case(
         "case": np.array(label),
         "source_xyz": source_xyz[sample].astype(np.float32),
         "source_flux_W_m2": source_flux[sample].astype(np.float32),
+        "exported_wallHeatFlux_W_m2": exported_flux[sample].astype(np.float32),
+        "flux_convention": np.array(flux_convention),
         "source_temperature_K": source_temperature[sample].astype(np.float32),
         "target_xyz": target_xyz.astype(np.float32),
         "target_area_m2": target_area.astype(np.float32),
@@ -330,9 +358,11 @@ def _analyze_case(
         "valid_face_count": len(source_xyz),
         "surface_area_m2": float(source_area.sum()),
         "active_target_node_count": int(np.count_nonzero(control_area > 0.0)),
-        "wall_heat_flux_min_W_m2": float(source_flux.min()),
-        "wall_heat_flux_mean_W_m2": float(np.average(source_flux, weights=source_area)),
-        "wall_heat_flux_max_W_m2": float(source_flux.max()),
+        "wall_heat_flux_min_W_m2": float(exported_flux.min()),
+        "wall_heat_flux_mean_W_m2": float(np.average(exported_flux, weights=source_area)),
+        "wall_heat_flux_max_W_m2": float(exported_flux.max()),
+        "target_inward_heat_flux_mean_W_m2": float(np.average(source_flux, weights=source_area)),
+        "flux_convention": flux_convention,
         "wall_temperature_min_K": float(np.nanmin(source_temperature)),
         "wall_temperature_mean_K": float(np.average(source_temperature, weights=source_area)),
         "wall_temperature_max_K": float(np.nanmax(source_temperature)),

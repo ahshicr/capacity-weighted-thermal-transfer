@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT / "code") not in sys.path:
     sys.path.insert(0, str(ROOT / "code"))
 
-from analyze_transfer import _analyze_case, _load_laplacian, _load_targets
+from analyze_transfer import _analyze_case, _load_laplacian, _load_targets, _sha256
 from vtp_polydata import read_ascii_vtp_surface
 
 
@@ -41,8 +41,10 @@ def main() -> None:
         type=Path,
         default=ROOT / "vehicle_surface_fields" / "wall_fields" / "gci_fine",
     )
-    parser.add_argument("--output", type=Path, default=ROOT / "results" / "gci_transfer")
+    parser.add_argument("--output", type=Path, default=ROOT / "results" / "revision_20261011" / "gci_transfer")
     args = parser.parse_args()
+    if args.output.exists() and any(args.output.iterdir()):
+        raise FileExistsError(f"Use a new output directory; retained results exist in {args.output}")
 
     targets = _load_targets(
         ROOT / "data" / "vehicle" / "thermal_nodes.csv",
@@ -111,6 +113,14 @@ def main() -> None:
         "nodewise_fine_gci_max_percent": float(node_frame["fine_gci_percent"].max()),
     }
     (args.output / "gci_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    manifest = {"status": "complete", "flux_convention": "openfoam-wallHeatFlux",
+                "export_to_target_flux_multiplier": -1,
+                "analysis_source_sha256": _sha256(Path(__file__)),
+                "transfer_source_sha256": _sha256(ROOT / "code/analyze_transfer.py"),
+                "input_hashes": {level: _sha256(next(directory.rglob('*.vtp')))
+                                 for level, directory in mesh_directories.items()},
+                "output_hashes": {p.name: _sha256(p) for p in args.output.iterdir() if p.is_file()}}
+    (args.output / "run_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     print(pd.DataFrame(rows).to_string(index=False))
     print(json.dumps(summary, indent=2))
 

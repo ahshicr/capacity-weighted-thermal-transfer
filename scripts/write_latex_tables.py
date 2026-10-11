@@ -7,6 +7,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "tables"
+RESULTS = ROOT / "results/revision_20261011"
 METHOD_LABELS = {
     "nearest_flux": "Nearest flux",
     "inverse_distance_flux": "Inverse distance",
@@ -35,7 +36,7 @@ def main() -> None:
 
 
 def write_cases() -> None:
-    frame = pd.read_csv(ROOT / "results" / "transfer_analysis" / "case_summary.csv")
+    frame = pd.read_csv(RESULTS / "transfer_analysis" / "case_summary.csv")
     lines = []
     for row in frame.itertuples():
         lines.append(
@@ -47,7 +48,7 @@ def write_cases() -> None:
 
 
 def write_methods() -> None:
-    frame = pd.read_csv(ROOT / "results" / "transfer_analysis" / "aggregate_metrics.csv").set_index("method")
+    frame = pd.read_csv(RESULTS / "transfer_analysis" / "aggregate_metrics.csv").set_index("method")
     lines = []
     for method, label in METHOD_LABELS.items():
         row = frame.loc[method]
@@ -62,7 +63,7 @@ def write_methods() -> None:
 
 
 def write_gci() -> None:
-    frame = pd.read_csv(ROOT / "results" / "gci_transfer" / "gci_quantities.csv")
+    frame = pd.read_csv(RESULTS / "gci_transfer" / "gci_quantities.csv")
     labels = {
         "area_mean_wall_heat_flux_W_m2": "Area mean wall heat flux",
         "mapped_total_heat_rate_W": "Mapped total heat rate",
@@ -79,7 +80,7 @@ def write_gci() -> None:
 
 
 def write_sensitivity() -> None:
-    frame = pd.read_csv(ROOT / "results" / "analysis" / "neighborhood_sensitivity.csv")
+    frame = pd.read_csv(RESULTS / "analysis" / "neighborhood_sensitivity.csv")
     frame = frame[frame.neighbors.isin([2, 4, 8, 12, 24, 64])]
     lines = []
     for row in frame.itertuples():

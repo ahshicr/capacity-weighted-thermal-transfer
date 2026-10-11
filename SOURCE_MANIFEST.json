@@ -1,5 +1,5 @@
 {
-  "snapshot_date": "2026-10-06",
+  "snapshot_date": "2026-10-11",
   "paper": "Capacity-weighted moment projection for conservative thermal transfer between nonmatching discretizations",
   "scope": "Minimal numerical reproducibility code, projection diagnostics, optional nonnegative extension and indispensable small vehicle inputs.",
   "files": [
@@ -17,20 +17,20 @@
     },
     {
       "file": "code/analyze_transfer.py",
-      "source_sha256": "c8bdce134ef38095e4def145d54da63858f61b6b4ad280dbf4022d9624a7b08e",
-      "release_sha256": "f53391f0acc93b28e2b862e0726b1cf4ba9149c458452fdfd1c27dd9f90ee692",
-      "adaptation": "Use the supplementary wall-field location by default; exclude coarse and medium GCI-only fields from the nine-case application. Numerical routines unchanged."
+      "source_sha256": "4ff3fc91b4e4402ef2527c3ce855946fafae32562139285ed394106e2f4998d0",
+      "release_sha256": "89fb026713fee24df0c2a51171d0e63afb41442e87d84014c326c7c52d63091e",
+      "adaptation": "Use the supplementary wall-field location by default; all numerical and sign-conversion routines are exact copies."
     },
     {
       "file": "code/analyze_gci_transfer.py",
-      "source_sha256": "2c6f532faf126308c4c4fba6e66bdce2115b293e617e37662d13d1725f5e3728",
-      "release_sha256": "626bc008a14926d9045738859dcdb1848dfb8e41f1ff0f9f5575c7deac93c313",
-      "adaptation": "Use coarse, medium and fine directories from the supplementary wall-field archive."
+      "source_sha256": "f73daca2ec90072324a422d9207e0bba1190026b744e024f0c1ff911f8038a45",
+      "release_sha256": "e771971b2f6943b3b2f56e722adca0f224712fda10415f67cdf2c5a5dd2208b0",
+      "adaptation": "Use coarse, medium and fine directories from the supplementary wall-field archive; numerical routines are exact copies."
     },
     {
       "file": "code/run_transfer_sweep.py",
-      "source_sha256": "354ba8429495f6fa4333fb6cac81d9d5ab26bd552c60f6933c7831c68e40d379",
-      "release_sha256": "354ba8429495f6fa4333fb6cac81d9d5ab26bd552c60f6933c7831c68e40d379",
+      "source_sha256": "f556b7508611a033781600ee7412da6baf15acb0cd642d4c91df3e21219d2837",
+      "release_sha256": "f556b7508611a033781600ee7412da6baf15acb0cd642d4c91df3e21219d2837",
       "adaptation": "none; exact copy"
     },
     {
@@ -53,8 +53,8 @@
     },
     {
       "file": "scripts/write_latex_tables.py",
-      "source_sha256": "a11ff8b9ef0d81e615b7bef1415806fc52e8dba756208c736e2ea66137dbb92c",
-      "release_sha256": "a11ff8b9ef0d81e615b7bef1415806fc52e8dba756208c736e2ea66137dbb92c",
+      "source_sha256": "9a2b17e7c9ef644f4f32762b512399fae498c9bbee3ae0a8fc98acf5f801c559",
+      "release_sha256": "9a2b17e7c9ef644f4f32762b512399fae498c9bbee3ae0a8fc98acf5f801c559",
       "adaptation": "none; exact copy"
     },
     {
@@ -109,6 +109,12 @@
       "file": "scripts/write_revision_tables.py",
       "source_sha256": "099a49ff4fa5b63877b6373b809641132852f45d88092b477f5590ef364b9987",
       "release_sha256": "099a49ff4fa5b63877b6373b809641132852f45d88092b477f5590ef364b9987",
+      "adaptation": "none; exact copy"
+    },
+    {
+      "file": "tests/test_flux_sign.py",
+      "source_sha256": "3e36258b73cc8d67b7e15b8014ac8d5ee1715a6bb2e3922ec1db5ed5aff1cd77",
+      "release_sha256": "3e36258b73cc8d67b7e15b8014ac8d5ee1715a6bb2e3922ec1db5ed5aff1cd77",
       "adaptation": "none; exact copy"
     }
   ]

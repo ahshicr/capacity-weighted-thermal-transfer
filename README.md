@@ -26,6 +26,7 @@ moment-compatibility diagnostics and a checked optional nonnegative extension.
 | `code/revision_projection.py` | Conditional error identity, moment-defect decomposition and an optional nonnegative QP with feasibility and optimality checks |
 | `code/run_revision_benchmarks.py` | Setup/application timing, 48-case compatibility audit and illustrative bounded-load examples |
 | `tests/test_revision_projection.py` | Six additional mathematical and constrained-optimization checks |
+| `tests/test_flux_sign.py` | Hot-wall heating, cooling and explicit already-inward conventions |
 | `tests/test_transfer.py` | Conservation, planar rank adaptation, overlap coverage and capacity-metric optimality |
 | `data/vehicle/` | Indispensable small graph and alignment inputs |
 | `data/gci/grid_convergence.json` | Recorded scalar source-grid convergence inputs for the evidence analysis |
@@ -118,10 +119,10 @@ The thermal graph includes documented engineering property assumptions;
 the wall fields are simulation outputs, not production-line measurements.
 
 ```text
-python -B code/analyze_transfer.py --surface-root vehicle_surface_fields/wall_fields --neighbors 8 --workers 1 --projection-metric capacity
+python -B code/analyze_transfer.py --surface-root vehicle_surface_fields/wall_fields --neighbors 8 --workers 1 --projection-metric capacity --duration-s 300 --time-step-s 5
 python -B code/analyze_gci_transfer.py
 python -B code/run_transfer_sweep.py --surface-root vehicle_surface_fields/wall_fields --parallel-runs 1 --total-workers 1
-python -B scripts/analyze_evidence.py
+python -B scripts/analyze_evidence.py --transfer results/revision_20261011/transfer_analysis --sweep results/revision_20261011/transfer_sweep --gci results/revision_20261011/gci_transfer --output results/revision_20261011/analysis
 python -B scripts/write_latex_tables.py
 ```
 
@@ -147,3 +148,23 @@ generated results are not part of this repository.
 Numerical routines and original tests are retained. The source manifest
 identifies the changes to portable field locations, the nine-case selection
 and removal of historical output-directory labels from scalar GCI metadata.
+
+## Heat-flux sign and retained results
+
+The OpenFOAM fluid-side `wallHeatFlux` convention is positive into the fluid.
+The solid thermal model uses positive heat input into the solid. The default
+adapter applies `q_target = -q_exported` exactly once before forming loads.
+Already-inward data must explicitly select `--flux-convention target-inward`.
+The exported field already includes its radiation contribution; do not add it
+again. Three dedicated sign checks are included, for a total of 13 tests.
+
+The vehicle, sensitivity and mapped GCI commands above create dated
+`results/revision_20261011/` outputs and refuse nonempty result directories.
+All nine cases, 13 sensitivity configurations and three mesh levels were
+recomputed for the corresponding article revision. These records are in the
+full supplementary archive. Older retained vehicle load signs describe the
+historical fluid-side convention and are not the revised solid-input results.
+The corrected input reverses signed loads and zero-initial-perturbation
+responses; reported norm errors, neighbor selection and GCI indices remain
+unchanged. This release corrects the interface convention and leaves the
+manufactured reference integrals and projection formula unchanged.
